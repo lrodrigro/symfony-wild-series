@@ -6,6 +6,7 @@ use App\Repository\ProgramRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use App\Entity\Season;
 use App\Entity\Category;
@@ -23,12 +24,19 @@ class Program
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank(message="Ne me laisse pas tout vide")
+     * @Assert\Length(max="255", maxMessage="Le titre du programme saisie {{ value }} est trop longue, il ne devrait pas dépasser {{ limit }} caractères")
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message="Ne me laisse pas tout vide")
+     * @Assert\Regex(
+     *     pattern="/On parle de vraies séries ici/",
+     *     match=false,
+     *     message="Le résumé ne peut pas contenir - On parle de vraies séries ici -")
      */
     private $summary;
 
